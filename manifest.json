@@ -1,0 +1,28 @@
+{
+	"manifest_version": 2,
+	"name": "dictionary",
+	"version": "1.0",
+
+	"description": "The dictionary....",
+
+	"icons": {
+		"48": "dictionary.png",
+		"96": "dictionary.png"
+	},
+
+	"browser_action": {
+		"default_icon": "dictionary.png",
+		"default_title": "The Dictionary...",
+		"default_popup": "popup.html"
+	},
+
+	"background": {
+		"scripts": ["find.js"],
+		"persistent": false
+	},
+
+	"permissions": [
+		"storage",
+		"contextMenus"
+	]
+}
