@@ -16,13 +16,21 @@
 		"default_popup": "popup.html"
 	},
 
+	"content_scripts": [
+		{
+			"matches": ["<all_urls>"],
+			"js": ["getSelectedWordMeaning.js"]
+		}
+	],
+
 	"background": {
-		"scripts": ["find.js"],
-		"persistent": false
+ 		"scripts": ["searchWordOnGoogle.js"],
+ 		"persistent": false
 	},
 
 	"permissions": [
-		"storage",
-		"contextMenus"
+		"tabs",
+		"http://*/*",
+		"https://*/*"
 	]
 }
