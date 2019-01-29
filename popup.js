@@ -10,13 +10,32 @@ for(i=0; i<dictionary_A.length; i++){
 $(function(){
 
 	// ======================  find word on  ======================
+	var counter = 1;
 	$("#findWord").on('input', function(){
 		var searchWord = $("#findWord").val()
 		for(i=1; i<6; i++){
-			$("#" + i).css("border","2px white solid")
-			$("#" + i).text(searchWord);
-
+			$("#" + i).css("border","2px white solid").text(searchWord);
 		};
+
+		if(searchWord === ""){
+			$("#resultWords").text("");
+			for(i=1; i<6; i++){
+				$("#" + i).css("border","").text('')
+			};
+			counter = 0;
+			return
+		}
+
+		var dictionary_words = Object.keys(dict_obj);
+		searchWord = searchWord[0].toUpperCase() + searchWord.slice(1,).toLowerCase();
+		for(var word of dictionary_words){
+			if(word === searchWord){
+				$("#" + i).css("border","").text(word);
+				counter += 1;
+			}
+		}
+
+
 
 	});
 
@@ -30,36 +49,33 @@ $(function(){
 	$("#findButton").on('click', function(){
 		var searchWord = $("#findWord").val()
 		for(i=1; i<6; i++){
-			$("#" + i).css("border","")
-			$("#" + i).text('');
+			$("#" + i).css("border","").text('');
 		};
 
 
 		if(searchWord === ""){
-			$("#resultWords").text("");	
-		}
-		else{
-			searchWord = searchWord[0].toUpperCase() + searchWord.slice(1,).toLowerCase();
+			$("#resultWords").text("Enter your words !!!",).css({'color': 'red', 'font-size': '150%'});
+			return
+		};
 
-			if(searchWord in dict_obj){
-				meaning = dict_obj[searchWord].split(";");
-				var new_meaning = ""
-				for(i=0; i<meaning.length; i++){
-					new_meaning += meaning[i] + "; \n"
-				}
-				$("#resultWords").text(new_meaning);
+		searchWord = searchWord[0].toUpperCase() + searchWord.slice(1,).toLowerCase();
+		if(searchWord in dict_obj){
+			meaning = dict_obj[searchWord].split(";");
+			var new_meaning = ""
+			for(i=0; i<meaning.length; i++){
+				new_meaning += meaning[i] + "; \n"
 			}
-		
-		// ====================== Search on google ======================
-			else{
-				if(confirm("No defination found!!! \n Search on google")){
-					chrome.tabs.create({'url': "https://www.google.com/search?ei=_BpLXLLqMMH6rQHStISwBA&q=" +  searchWord + "&oq=" + searchWord + "&gs_l=psy-ab.3..0l5.3767.5475..6179...1.0..0.395.1344.0j4j1j1......0....1..gws-wiz.....6..0i71j35i39j0i131j0i10.FSbIpQfntUQ"})
-				}
-				else{
-					$("#resultWords").text("No defination found   !!!");
-				}
-			}	
+			$("#resultWords").text(new_meaning).css({'color': 'black'});
+			return
 		}
+
+		// ====================== Search on google ======================
+		if(confirm("No defination found!!! \n Search on google")){
+			chrome.tabs.create({'url': "https://www.google.com/search?ei=_BpLXLLqMMH6rQHStISwBA&q=" +  searchWord + "&oq=" + searchWord + "&gs_l=psy-ab.3..0l5.3767.5475..6179...1.0..0.395.1344.0j4j1j1......0....1..gws-wiz.....6..0i71j35i39j0i131j0i10.FSbIpQfntUQ"})
+			return
+		}
+		$("#resultWords").text("No defination found   !!!").css({'color': 'red', 'font-size': '130%'});
+
 	});
 
 });

@@ -23,22 +23,20 @@ new_node.addEventListener("dblclick", function(){
 	
 	var searchWord = window.getSelection();
 	searchWord = searchWord.toString();
+	searchWord = searchWord.split(" ");
 	
-	if(searchWord === ""){
-
+	if(searchWord.length == 0 || searchWord.length >1){
+		return
 	}
-	else{
-		searchWord = searchWord[0].toUpperCase() + searchWord.slice(1,).toLowerCase();
-		if(searchWord in dict_obj){
-				alert(dict_obj[searchWord]);
-		}
-		
-		//  ============= Search on google ==========
-		else{
+	
+	searchWord = searchWord[0][0].toUpperCase() + searchWord[0].slice(1,).toLowerCase();
+	if(searchWord in dict_obj) {
+		alert(dict_obj[searchWord]);
+		return
+	}
 
-			if(confirm("No defination found!!! \n Search on google")){
-				chrome.runtime.sendMessage({'search_word': searchWord})
-			}
-		};
+	//  ============= Search on google ==========
+	if(confirm("No defination found!!! \n Search on google")) {
+		chrome.runtime.sendMessage({'search_word': searchWord});
 	}
 });
