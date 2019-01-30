@@ -21,43 +21,46 @@ function insertNode(word){
 		}
 		else{
 			current.members[new_words[counter]] = new Node();
-			current = current.members[new_words[counter]];
+			if(counter === new_words.length - 1){
+				current.endofWord[new_words[counter]] = true;
+				return
+			}
 			current.endofWord[new_words[counter]] = false;
-			counter += 1;
+			current = current.members[new_words[counter]];
+			counter += 1
 		}
 	}
-	current.endofWord[new_words[counter-1]] = true;
 };
 
+
 function giveSuggestion(result, current){
-	console.log(typeof current)
+	
 	if(typeof current != "undefined"){
 		var keys_of_members = Object.keys(current.members);
 		
 		for(var i=0; i<keys_of_members.length; i++){
-			if(current.endofWord[keys_of_members[i]] == true){
+			if(current.endofWord[keys_of_members[i]] === true){
 				result += keys_of_members[i];
-				console.log(result);
-				current = current.members[keys_of_members[i]];
-				giveSuggestion(result, current);
+				console.log(result)
+				giveSuggestion(result, current.members[keys_of_members[i]]);
+				result = result.slice(0, -1);
+				continue
 			}
-			else{
-				result += keys_of_members[i];
-				current = current.members[keys_of_members[i]];
-				giveSuggestion(result, current);
-			}
-		}
+			result += keys_of_members[i];
+			giveSuggestion(result, current.members[keys_of_members[i]]);
+		};
 	}
-	else{
-		return
-	}
-}
-
+};
 
 
 function traverse(word, current){
-	while(word in current.members){
-		current = current.members[word];
+	var new_word = word.split("")
+	let counter = 0;
+	while(counter < new_word.length){
+		if(new_word[counter] in current.members){
+			current = current.members[new_word[counter]];
+			counter += 1;
+		}
 	}
 	giveSuggestion(word, current);
 };
@@ -67,5 +70,4 @@ for(let i=0; i<words.length; i++){
 	insertNode(words[i])
 };
 
-
-traverse('a', head);
+traverse('abc', head);
